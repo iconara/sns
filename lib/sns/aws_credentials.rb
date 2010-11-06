@@ -14,9 +14,9 @@ class Sns
       @host = "sns.#{region}.amazonaws.com"
     end
   
-    def sign(query_string, method='GET')
+    def sign(query_string, path='/', method='GET')
       hmac = HMAC::SHA256.new(@secret_key)
-      hmac.update("#{method}\n#{@host}\n/\n#{query_string}")
+      hmac.update([method, @host, path, query_string].join("\n"))
       signature = Base64.encode64(hmac.digest).chomp
     end
   end
